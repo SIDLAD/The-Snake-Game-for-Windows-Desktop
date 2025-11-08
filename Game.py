@@ -126,10 +126,10 @@ class TheSnakeGame(Session):
         if new_pos[0] < 0 or new_pos[0] >= self.rowMax or new_pos[1] < 0 or new_pos[1] >= self.colMax:
             self._log("Cannot move out of bounds")
             return  # Out of bounds
-        if self._snake_body.contains(new_pos) and (not len(self._snake_body) or self._snake_body.positions[-1] != new_pos):
+        if self._snake_body.contains(new_pos) and (len(self._snake_body) <= 1 or self._snake_body.positions[-1] != new_pos):
             self._log("Cannot move into itself")
             return  # Cannot move into itself
-        if len(self._snake_body) and self._snake_body.positions[-1] == new_pos:
+        if len(self._snake_body) > 1 and self._snake_body.positions[-1] == new_pos:
             self._log("Chasing your own tail, eh?")
             self._swapIcons(self.current_position, new_pos)
             self._snake_body.move_body(self.current_position, remove_at_tail=True)
