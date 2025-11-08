@@ -147,6 +147,8 @@ class TheSnakeGame(Session):
         
         self.current_position = new_pos
         # self._log(f"Snake head now at {self.current_position}, body at {self._snake_body.to_list()}")
+        if self._getAvailableMoves() == []:
+            raise Exception("No available moves left, game over!")
     
     def __enter__(self):
         
@@ -170,7 +172,18 @@ class TheSnakeGame(Session):
         return self
     
     def _getAvailableMoves(self):
-        pass
+        curx, cury = self.current_position
+        dx = [0, 0, -1, 1]
+        dy = [-1, 1, 0, 0]
+        moves = []
+        for i in range(4):
+            newx = curx + dx[i]
+            newy = cury + dy[i]
+            if 0 <= newx < self.rowMax and 0 <= newy < self.colMax:
+                if not self._snake_body.contains((newx, newy)) or (len(self._snake_body) > 1 and (newx, newy) == self._snake_body.positions[-1]):
+                    moves.append((newx, newy))
+        
+        return moves
     
     @init_grid
     def _init_apples(self):
